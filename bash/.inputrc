@@ -1,0 +1,4 @@
+# AA added 20150804
+# Enables full tab completion of symlinked dirs
+$include /etc/inputrc
+set mark-symlinked-directories on
