@@ -35,13 +35,22 @@ Plug 'tpope/vim-sensible'
 Plug 'klen/python-mode' 
 
 " code completion engine for vim
+" compare autocomplete : jedi and rope and YCM
 Plug 'Valloric/YouCompleteMe'
 
 " Plug 'https://github.com/altercation/vim-colors-solarized.git'
+" vim-colors-solarized
 Plug 'https://github.com/frankier/neovim-colors-solarized-truecolor-only'
 
+" Sidebars
+" look at others? 
+Plug 'https://github.com/scrooloose/nerdtree' 
+
+" Plugins to look into: 
 " TODO: vim-jinja
-" TODO: vim-colors-solarized
+" TODO: ag search silver
+"
+
 call plug#end()
 
 " ~~~~~~~~~~~~~
