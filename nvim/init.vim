@@ -37,6 +37,8 @@ Plug 'klen/python-mode'
 " code completion engine for vim
 " compare autocomplete : jedi and rope and YCM
 Plug 'Valloric/YouCompleteMe'
+" is ycm activated? requires install step
+" Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
 " Plug 'https://github.com/altercation/vim-colors-solarized.git'
 " vim-colors-solarized
@@ -46,7 +48,12 @@ Plug 'https://github.com/frankier/neovim-colors-solarized-truecolor-only'
 " look at others? 
 Plug 'https://github.com/scrooloose/nerdtree' 
 
+" Code Browsing
+" required: sudo apt-get install exuberant-ctags 
+Plug 'https://github.com/vim-scripts/taglist.vim'
+
 " Plugins to look into: 
+" http://vim.wikia.com/wiki/Use_Vim_like_an_IDE 
 " TODO: vim-jinja
 " TODO: ag search silver
 "
