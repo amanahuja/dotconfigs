@@ -1,0 +1,2 @@
+# when using screen with vim, avoid 'escape' delay
+maptimeout 5
