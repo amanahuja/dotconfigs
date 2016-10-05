@@ -52,11 +52,14 @@ Plug 'https://github.com/scrooloose/nerdtree'
 " required: sudo apt-get install exuberant-ctags 
 Plug 'https://github.com/vim-scripts/taglist.vim'
 
+" Ag silver searcher in vim
+" Requires Ag to be installed on system
+" Note: this plugin no longer maintained
+Plug 'https://github.com/rking/ag.vim'
+
 " Plugins to look into: 
 " http://vim.wikia.com/wiki/Use_Vim_like_an_IDE 
 " TODO: vim-jinja
-" TODO: ag search silver
-"
 
 call plug#end()
 
@@ -64,6 +67,10 @@ call plug#end()
 " after plugins load
 
 " Python-mode settings
+
+" Lint checker
+" E731 : named lambdas [pep8]
+let g:pymode_lint_ignore = "E731"
 
 " If you prefer the Omni-Completion tip window to close when a selection is
 " made, these lines close it on movement in insert mode or when leaving
@@ -73,6 +80,9 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " for python mode and code complete
 filetype plugin indent on
+
+" NERDTree
+let NERDTreeIgnore = ['\.pyc$', '\.ipynb$']
 
 " scheme and themes
 colorscheme solarized
