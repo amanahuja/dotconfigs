@@ -4,10 +4,6 @@ set nocompatible
 filetype off
 syntax on " vs syntax enable
 
-" for solarized theme
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-set background=light  " or dark
-
 " ~~~~~~~~~~~ Keymappings
 " see also defaults in sensible
 
@@ -85,4 +81,12 @@ filetype plugin indent on
 let NERDTreeIgnore = ['\.pyc$', '\.ipynb$']
 
 " scheme and themes
-colorscheme solarized
+" see also: gruvbox
+
+" solarized
+"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"let g:solarized_termcolors=256
+set t_co=16
+set background=light  " or dark
+
+"colorscheme solarized
