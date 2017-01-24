@@ -36,8 +36,9 @@ Plug 'Valloric/YouCompleteMe'
 " is ycm activated? requires install step
 " Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 
+" Solarized
+" See original repo: http://ethanschoonover.com/solarized
 " Plug 'https://github.com/altercation/vim-colors-solarized.git'
-" vim-colors-solarized
 Plug 'https://github.com/frankier/neovim-colors-solarized-truecolor-only'
 
 " Sidebars
@@ -74,6 +75,7 @@ let g:pymode_lint_ignore = "E731"
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
+" reenable file type
 " for python mode and code complete
 filetype plugin indent on
 
@@ -86,7 +88,8 @@ let NERDTreeIgnore = ['\.pyc$', '\.ipynb$']
 " solarized
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 "let g:solarized_termcolors=256
-set t_co=16
+" set termguicolors
 set background=light  " or dark
+" set t_co=16
 
-"colorscheme solarized
+colorscheme solarized
