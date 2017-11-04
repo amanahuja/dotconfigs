@@ -1,5 +1,4 @@
 " .vimrc // nvim/init.vim
-" @amanqa see github.com/amanahuja/dotconfigs
 "
 
 " Notes
@@ -16,70 +15,79 @@ syntax on " vs syntax enable
 
 call plug#begin()
 
+" Plugins to look into:
+" http://vim.wikia.com/wiki/Use_Vim_like_an_IDE
+" https://github.com/Shougo/denite.nvim
+" vim-jinja
+
+" Aman cheatsheet plugin
+Plug '~/dotconfigs/nvim/myhelp'
+
 " ## General / these plugs affect everything
 Plug 'tpope/vim-sensible'
 
-" ## Sidebars and status bars
-Plug 'https://github.com/scrooloose/nerdtree'
-" others:
-" vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
-" vinegar.vim - extends netrw; first uninstall nerdtree
-" Plug 'https://github.com/tpope/vim-vinegar'
 
+" ## FILE NAV & SEARCH
+"    https://www.reddit.com/r/vim/comments/wb0t5/commandt_vs_ctrlpvim_vs_fuzzyfinder_go/
+"    vimcasts.org/blog/2013/01/oil-and-vinegar-split-windows-and-project-drawer/
+"    vinegar.vim - extends netrw; first uninstall nerdtree
+"    Plug 'https://github.com/tpope/vim-vinegar'
+"    fzf w/ fzf-vim. Adds fuzzy search to Ag.
+
+" NERD Tree.
+Plug 'https://github.com/scrooloose/nerdtree'
+
+" Ag silver searcher: requires Ag to be installed on system, not maintained
+Plug 'https://github.com/rking/ag.vim'
+
+
+" ## NOTIFICATION AND STATUS
 " vim-signify: shows diff in sign column sidebar
 Plug 'mhinz/vim-signify'
 
-" vim-airline: lean status/tabline
-" WARNING: might cause things to slow down
+" vim-airline: lean status/tabline ; may cause vim to run slow
 Plug 'vim-airline/vim-airline'
 
-" ## Search and motion
-" Ag silver searcher: requires Ag to be installed on system
-" this plugin no longer maintained
-Plug 'https://github.com/rking/ag.vim'
-" See instead: fzf w/ fzf-vim. Adds fuzzy search to Ag.
 
-" vim-sneak -- s{char}{char}
+" ## NAVIGATION AND MOTION
+" SURROUND -- FOR PARENTS, QUOTES, ETC
+Plug 'tpope/vim-surround'
+
+" VIM-SNEAK -- S{CHAR}{CHAR}
 Plug 'justinmk/vim-sneak'
 
-" ## Persistence & Session Management
+
+" ## PERSISTENCE & SESSION MANAGEMENT
 " vim-workspace: sessions + autosave + misc
 Plug 'thaerkh/vim-workspace'
 
-" ## Coding stuff
-" Plug 'python-mode/python-mode'
-Plug 'python-mode/python-mode', {'branch': 'develop'}
-" look into async lint checks on neovim
 
-" code completion engine for vim
-" YouCompleteMe - activated? requires install step
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+" ## CODING STUFF
+" look into async lint checks on neovim
 " compare autocomplete : jedi and rope and YCM
 
-" Code Browsing
-" required: sudo apt-get install exuberant-ctags
+" Plug 'python-mode/python-mode'
+Plug 'python-mode/python-mode', {'branch': 'develop'}
+
+" YouCompleteMe - requires install step
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+
+" Code Browsing ; requires ctags and ctags file
 Plug 'https://github.com/vim-scripts/taglist.vim'
 
-" Testing and TDD
+" ## TESTING AND TDD
 " Plug 'janko-m/vim-test'
 
-" ~~ color schemes / Themes ~~
+" ## COLOR SCHEMES / THEMES
 
-" Solarized
+" Solarized -- don't use this.
 " See original repo: http://ethanschoonover.com/solarized
-Plug 'https://github.com/altercation/vim-colors-solarized.git'
-" Plug 'https://github.com/frankier/neovim-colors-solarized-truecolor-only'
 
 " gruvbox
 Plug 'morhetz/gruvbox'
 
 " other color schemes
 Plug 'raphamorim/lucario'
-
-" Plugins to look into:
-" http://vim.wikia.com/wiki/Use_Vim_like_an_IDE
-" https://github.com/Shougo/denite.nvim
-" TODO: vim-jinja
 
 call plug#end()
 
@@ -113,6 +121,11 @@ let NERDTreeIgnore = ['\.pyc$', '\.ipynb$']
 
 " Taglist options
 let Tlist_GainFocus_On_ToggleOpen = 1
+
+
+" vim-workspace options
+let g:workspace_autosave_always = 0
+
 " ~~~~~~~~~~~~~
 " scheme and themes configuration
 
@@ -127,7 +140,8 @@ let Tlist_GainFocus_On_ToggleOpen = 1
 " gruvbox options
 " set termguicolors
 " let g:gruvbox_italic=1
-" colorscheme gruvbox
+colorscheme gruvbox
+set background=dark
 
 " ~~~~~~~~~~~ Keymappings
 " <A-key> alt-commands | <C-key> control commands
@@ -150,44 +164,48 @@ let Tlist_GainFocus_On_ToggleOpen = 1
 :nnoremap <A-k> <C-w>k
 :nnoremap <A-l> <C-w>l
 
+
+" ~~~~~~~~~~commands custom #AA
+
+" see :help :DiffOrig
+command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
+	\ | diffthis | wincmd p | diffthis
+
 " Leader custom mappings | see :help mapleader
 " Use Space. Note: avoid conflict with tmux prefix
 " if using space don't use innoremap else delays on space
 let mapleader = " "
 set timeoutlen=500
-" CHAR | result
 
+" CHAR | RESULT
+" v    | open MYVIMRC for editing
+" V    | reload MYVIMRC
+nnoremap <leader>v :tabe ~/dotconfigs/nvim/myhelp/doc/myhelp.txt<CR>:vsp $MYVIMRC<CR>
+nnoremap <leader>V :so $MYVIMRC<CR>
 " l    | next tab
 nnoremap <leader>l :tabn<CR>
-
-" 5    | insert datetime
-nnoremap <leader>5 "=strftime('%c')<CR>P
-
+" 5    | insert date (format YYYY-MM-DD DAY)
+" %    | insert datetime
+nnoremap <leader>5 "=strftime('%Y-%m-%d %a')<CR>P
+nnoremap <leader>% "=strftime('%c')<CR>P
 " p    | paste from system clipboard
-nnoremap <leader>p "+p
-
 " y    | yank to system clipboard
+nnoremap <leader>p "+p
 vnoremap <leader>y "+y
-
-" F    | Toggle NerdTree
+vnoremap <leader>d "+d
+" F    | Toggle NERDTree
 nnoremap <leader>F <Esc>:NERDTreeToggle<CR>
-
 " T    | Toggle Taglist
 nnoremap <leader>T <Esc>:TlistToggle<CR>
-
 " C    | set alternate colorsheme setting
 nnoremap <leader>C <Esc>:colo gruvbox<CR>
-
 " =    | align current paragraph
 nnoremap <leader>= =ip
-
 " z    | toggle fold
 nnoremap <leader>z za
-
 " e    | defition for python object (use K for docs)
 let g:pymode_rope_goto_definition_bind = '<leader>e'
 let g:ycm_key_detailed_diagnostics = '<leader>ycm'
-
 
 " ~~~~~~~~~~~~~
 " Other settings and mappings
@@ -198,4 +216,9 @@ set inccommand=split
 " mods python-mode default to relative numbering
 set relativenumber
 
-
+set shiftwidth=4 " operation >> indents 4 columns; << unindents 4 columns
+set tabstop=4 " an hard TAB displays as 4 columns
+set expandtab " insert spaces when hitting TABs
+set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
+set shiftround " round indent to multiple of 'shiftwidth'
+set autoindent " align the new line indent with the previous line
