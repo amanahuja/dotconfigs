@@ -16,56 +16,78 @@ CONTENTS
 ===============================================================================
 1. Normal Mode                                         *myhelp-normal*
 
-   - :wall : Save modified buffers
-   - :x : Save buffer only if modified, then exit (better than :wq)
-   - ] : next section
-   - ) : Next sentence
-   - CTRL-D : Down half a page
-   - CTRL-U : Up half a page
-   - gU<nav> : convert to uppercase
-   - z commands:
-      - z : Current line at the top
-      - z. : current line at the center
-      - z- : current line at the bottom
+    - gU<nav> : convert to uppercase
+    - z commands:
+        - z : Current line at the top
+        - z. : current line at the center
+        - z-j : current line at the bottom
+    - `gq` and `gw`   -- break long lines, eg `gqq` for current line 
 
-   - /<C-R><C-W>: Pull word into command line (or search)
-   - :reg : list registers (and show what’s in them)
+1.1. Control
+    - :wall : Save modified buffers
+    - :x : Save buffer only if modified, then exit (better than :wq)
+    - /<C-R><C-W>: Pull word into command line (or search)
 
-1.1. Search 
-   - set inccommand=split : for incremental search etc. 
-   - surround
-       
-1.2. Coding stuff 
-   - <leader>F          : nerdtree
-   - <leader>T          : taglist
-
-1.3. Snippets
-   - <leader>5, <leader>%        : insert timestamp for notes
-   - <leader>p, y, d             : paste, yank, cut to/from system clipboard
+1.2. Navigation 
+    - ] : next section
+    - ) : Next sentence
+    - CTRL-D : Down half a page
+    - CTRL-U : Up half a page
+ 
+1.3. Search
+    - set inccommand=split : for incremental search etc.
+    - surround
 
 ===============================================================================
 2. Visual Mode                                         *myhelp-visual*
 
-   - J : Join the highlighted lines, removing unnecessary whitespace.
-   - va' : select a single-quoted string (also works with " and `)
+   - `J` : Join the highlighted lines, removing unnecessary whitespace.
+   - `va`' : select a single-quoted string (also works with " and `)
    - vi' : select the contents of a single-quoted string
    - vab : select a "block" (works differently in different langs)
 
 ===============================================================================
 3. Insert Mode                                         *myhelp-insert*
 
-   - <C-N><C-P>: Complete word , forward, backwards
-   - <C-X><C-L>: Complete line (!!)
+Omnicomplete, see :help ins-completion
+    - `<c-x><c-o>`: omni-completion 
+    - `<C-N><C-P>`: Complete word , forward, backwards
+    - `<C-X><C-L>`: Complete line (!!)
 
 ===============================================================================
-4. NOTES                                               *myhelp-notes*
+4. Plugins
 
+4.1 vim-surround
+    - `cs` (change surround), `ys` (you surround), `ds` (delete surround)
+    - `ysiw(`  is the same as cswb
+    - b, B, r, a  == ( { [ <
+
+===============================================================================
+5. NOTES                                               *myhelp-notes*
+    - `:map`                   : show mappings
+    - `:edit term://bash`
+    - `:vsplit term://top`
+    - `:w !sudo tee %`         : Save file edited without needed permissions
+    - `:set colorcolumn=79`  : For marking long lines (pep8, E501)
+
+5.1 <leader> shortcuts
     - <leader>               : is set to " " space
-    - :map                   : show mappings
-    - :verbose map <leader>  : show mapping in all modes that use <leader> 
+    - :verbose map <leader>  : show mapping in all modes that use <leader>
+    - <leader>F          : nerdtree
+    - <leader>T          : taglist
+    - <leader>l          : next tab
+
+5.2. Snippets
+    - <leader>5, <leader>%        : insert timestamp for notes
+    - <leader>p, y, d             : paste, yank, cut to/from system clipboard
+
+5.3. Registers
+    - numbered registers: 0 is most recent
+    - `:reg` :                    : list registers (and show what’s in them)
+    - `["x]p`                     :  paste from specific register x:
 
 ===============================================================================
-5. Rebuilding this file.
+6. Rebuilding this file.
 
 This file is loaded as a plugin. If you ever need to rebuild the tags file, run
 this command: >
