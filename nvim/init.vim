@@ -77,51 +77,22 @@ call plug#end()
 
 " Plugin Configurations {{{
 
-" reenable file type
-" useful for python mode and code complete
-filetype plugin indent on
 
 source $HOME/.config/nvim/plug-config/coc.vim
+source $HOME/.config/nvim/plug-config/nerdtree.vim
+source $HOME/.config/nvim/plug-config/airline.vim
+source $HOME/.config/nvim/plug-config/beacon.vim
+source $HOME/.config/nvim/plug-config/vista.vim
+source $HOME/.config/nvim/plug-config/vimspector.vim
+
+" source $HOME/.config/nvim/plug-config/workspace.vim
 " source $HOME/.config/nvim/plug-config/w0rp-ale.vim
 " source $HOME/.config/nvim/plug-config/pymode.vim
+" source $HOME/.config/nvim/plug-config/deoplete.vim
+" source $HOME/.config/nvim/plug-config/ack.vim
+" }}}
 
-" used by deoplete 
-let g:python3_host_prog = '/home/aman/anaconda3/bin/python'
-" 
-" If you prefer the Omni-Completion tip window to close when a selection is
-" made, these lines close it on movement in insert mode or when leaving
-" insert mode
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-" NERDTree
-let NERDTreeIgnore = ['\.pyc$', '\.ipynb$']
-" see nerdtree-git-plugin(tsony and Xuyuanp) and nerdtree-syntax-highlight
-
-" statusbar vim-airline
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline_extensions = ['vista', 'coc' ] 
-let g:airline_theme='dark'
-
-" Beacon.nvim config
-" let g:beacon_size = 30
-" let g:beacon_show_jumps = 0 --> only beacon b/w windows
-" let g:beacon_mininal_jump = 10 
-
-" vim-workspace options
-" let g:workspace_autosave_always = 0
-
-" vim-ack: if available, use ag silver searcher
-" if executable('ag')
-"     let g:ackprg = 'ag --vimgrep'
-" endif
-
-" vista options
-let g:vista_default_executive='coc'
-"
-
-" VimSpector configuration
-let g:vimspector_enable_mappings = 'HUMAN'
+" Scheme and theme {{{
 
 " ~~~~~~~~~~~~~
 " scheme and themes configuration
@@ -222,6 +193,13 @@ nnoremap <leader>d :only<bar>vsplit<CR>gd
 " }}}
 
 " Other settings and mappings {{{
+"
+" If you prefer the Omni-Completion tip window to close when a selection is
+" made, these lines close it on movement in insert mode or when leaving
+" May not be relevant after vim 7
+" insert mode
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " For buffer unsaved changes
 set hidden
