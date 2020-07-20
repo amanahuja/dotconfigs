@@ -33,6 +33,7 @@ CONTENTS
     - ) : Next sentence
     - CTRL-D : Down half a page
     - CTRL-U : Up half a page
+    - zz or z. : center cursor
  
 1.3. Search
     - set inccommand=split : for incremental search etc.
@@ -62,6 +63,25 @@ Omnicomplete, see :help ins-completion
     - `ysiw(`  is the same as cswb
     - b, B, r, a  == ( { [ <
 
+4.2 Coding overview
+    - Use nerdtree to nav files, and Vista by tags (universal-ctags)
+    - `:call CocAction('format')`   to format current document
+    - search: 
+    - `<leader>gd`       : go to definition
+
+4.3 Searching and FZF
+    - Ag to search. Select desired results (tab, `alt-a`), then enter
+    - quickfix list navigation: `:cn`, `:cN`. Also see `:cdo`
+    - `:Files`, `:Marks`, `:Commands`, etc. see fzf.vim docs
+    - `CTRL-T`/`CTRL-V` to open in tab or vsplit
+    - 
+
+4.4 Coc stuff
+    - `:CocInfo`   for general info
+    - `:CocConfig`   to view and edit configuration
+    - `:CocCommand marketplace`  
+
+
 ===============================================================================
 5. NOTES                                               *myhelp-notes*
     - `:map`                   : show mappings
@@ -75,7 +95,8 @@ Omnicomplete, see :help ins-completion
     - :verbose map <leader>  : show mapping in all modes that use <leader>
     - <leader>F          : nerdtree
     - <leader>T          : taglist
-    - <leader>l          : next tab
+    - <leader>l or b     : next tab, buffer
+    - alt-nav {hjkl}     : navigate windows, terminal or normal mode
 
 5.2. Snippets
     - <leader>5, <leader>%        : insert timestamp for notes
