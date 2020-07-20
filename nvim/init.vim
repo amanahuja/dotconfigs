@@ -1,1 +1,0 @@
-/home/aman/.config/nvim/init.vim
