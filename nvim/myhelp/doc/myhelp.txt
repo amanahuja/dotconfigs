@@ -10,8 +10,10 @@ CONTENTS
 	1. Normal Mode.......................................|myhelp-normal|
 	2. Visual Mode.......................................|myhelp-visual|
 	3. Insert Mode.......................................|myhelp-insert|
-	4. Notes.............................................|myhelp-notes|
-	5. Rebuilding this file
+	4. Plugins...........................................|myhelp-plugins|
+    5. Troubleshooting...................................|myhelp-troubleshooting|
+    6. Notes.............................................|myhelp-notes|
+	7. Rebuilding this file..............................|myhelp-rebuilding|
 
 ===============================================================================
 1. Normal Mode                                         *myhelp-normal*
@@ -73,49 +75,52 @@ Omnicomplete, see :help ins-completion
     - quickfix list navigation: `:cn`, `:cN`. Also see `:cdo`
     - `:Files`, `:Marks`, `:Commands`, etc. see fzf.vim docs
     - `CTRL-T`/`CTRL-V` to open in tab or vsplit
+    - Search and Replace in multiple files: Use `:CocSearch`
 
 4.4 Coc stuff
     - lots of goodies and mappings see coc configuration
     - `[g` and `]g` to navigate diagnostics
     - `:CocInfo`   for general info
     - `:CocConfig`   to view and edit configuration
-    - `:CocCommand marketplace`  
+    - `:CocList marketplace`  
 
 
 
 ===============================================================================
-4. NOTES                                               *myhelp-troubleshooting*
+5. TROUBLESHOOTING                                    *myhelp-troubleshooting*
     - to test and see term gui colors in active colorscheme: 
     `:source $VIMRUNTIME/syntax/hitest.vim`
     - `:hi Normal gui=undercurl` for {Normal, bold, underline, italic}
 
 ===============================================================================
-5. NOTES                                               *myhelp-notes*
+6. NOTES                                               *myhelp-notes*
     - `:map`                   : show mappings
     - `:edit term://bash`
     - `:vsplit term://top`
     - `:w !sudo tee %`         : Save file edited without needed permissions
     - `:set colorcolumn=79`  : For marking long lines (pep8, E501)
 
-5.1 <leader> shortcuts
-    - <leader>               : is set to " " space
+6.1 <leader> shortcuts
+    - see `vim-which-keys` an d :maps
     - :verbose map <leader>  : show mapping in all modes that use <leader>
+    - <leader>               : is set to " " space
+    ---------------------------------------------------------------------
     - <leader>F          : nerdtree
     - <leader>T          : taglist
     - <leader>l or b     : next tab, buffer
     - alt-nav {hjkl}     : navigate windows, terminal or normal mode
 
-5.2. Snippets
+6.2. Snippets
     - <leader>5, <leader>%        : insert timestamp for notes
     - <leader>p, y, d             : paste, yank, cut to/from system clipboard
 
-5.3. Registers
+6.3. Registers
     - numbered registers: 0 is most recent
     - `:reg` :                    : list registers (and show what’s in them)
     - `["x]p`                     :  paste from specific register x:
 
 ===============================================================================
-6. Rebuilding this file.
+7. Rebuilding this file.
 
 This file is loaded as a plugin. If you ever need to rebuild the tags file, run
 this command: >

@@ -1,12 +1,24 @@
 " .vimrc // nvim/init.vim
+" >>> echo $VIM
+" >>> echo $MYVIMRC
+" >>> echo $XDG_CONFIG_HOME
 
 " Notes
 " use :so % or :so $MYVIMRC to reload
+"
+" scratchpad: 
+" set nobackup
 
 " for python and autocomplete plugins
 set nocompatible
 filetype off
 syntax on " vs syntax enable
+
+" set python 
+let g:python_host_prog = '/usr/bin/python2'
+" disable python 2 support or set it. 
+" let g:loaded_python_provider = 0  
+let g:python3_host_prog = '/home/aman/anaconda3/bin/python'
 
 " Vim Plug {{{
 
@@ -31,19 +43,22 @@ Plug 'https://github.com/scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-"Plug 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak'
 "Plug 'mileszs/ack.vim'
 
 " ## NOTIFICATION AND STATUS
+" Note: Powerline replaced by airline. Lightline is simpler still
 "Plug 'mhinz/vim-signify'
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 
 " ## CODING STUFF
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
 Plug 'puremourning/vimspector'   " Graphical debugging
 Plug 'liuchengxu/vista.vim'      " code navigation and ctags
-"Plug 'tpope/vim-fugitive'
-"
+Plug 'honza/vim-snippets'  " for use with coc-snippets, for example
+Plug 'tpope/vim-fugitive'  " git integration, along with coc-git and signify
+
 " ## COLOR SCHEMES / THEMES
 " gruvbox, lucario. Don't use solarized
 Plug 'morhetz/gruvbox'
@@ -51,6 +66,10 @@ Plug 'raphamorim/lucario'
 
 " ## non essential accessories
 Plug 'danilamihailov/beacon.nvim'
+
+Plug 'liuchengxu/vim-which-key'
+" Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
 
 " Disabled plugins;
 "    Python mode conflicts with ale?
@@ -78,13 +97,17 @@ call plug#end()
 " Plugin Configurations {{{
 
 
+" also remember to check :CocConfig for coc
 source $HOME/.config/nvim/plug-config/coc.vim
+
 source $HOME/.config/nvim/plug-config/nerdtree.vim
-source $HOME/.config/nvim/plug-config/airline.vim
+"source $HOME/.config/nvim/plug-config/airline.vim
+source $HOME/.config/nvim/plug-config/lightline.vim
 source $HOME/.config/nvim/plug-config/beacon.vim
 source $HOME/.config/nvim/plug-config/vista.vim
 source $HOME/.config/nvim/plug-config/vimspector.vim
 
+source $HOME/.config/nvim/plug-config/which-key.vim
 " source $HOME/.config/nvim/plug-config/workspace.vim
 " source $HOME/.config/nvim/plug-config/w0rp-ale.vim
 " source $HOME/.config/nvim/plug-config/pymode.vim
@@ -155,11 +178,13 @@ set timeoutlen=500
 " CHAR | RESULT
 " v    | open MYVIMRC for editing
 " V    | reload MYVIMRC
-nnoremap <leader>v :tabe ~/dotconfigs/nvim/myhelp/doc/myhelp.txt<CR>:vsp $MYVIMRC<CR>
+"nnoremap <leader>v :tabe ~/dotconfigs/nvim/myhelp/doc/myhelp.txt<CR>:vsp $MYVIMRC<CR>
+nnoremap <leader>v :tabe $MYVIMRC<CR>
 nnoremap <leader>V :so $MYVIMRC<CR>
 " l    | next tab, buffer
 nnoremap <leader>l :tabn<CR>
 nnoremap <leader>b :bnext<CR>
+nnoremap <leader>B :bprev<CR>
 " 5    | insert date (format YYYY-MM-DD DAY)
 " %    | insert datetime
 nnoremap <leader>5 "=strftime('%Y-%m-%d %a')<CR>P
@@ -173,6 +198,8 @@ vnoremap <leader>d "+d
 nnoremap <leader>F <Esc>:NERDTreeToggle<CR>
 " T    | Toggle Taglist
 nnoremap <leader>T <Esc>:TlistToggle<CR>
+" G    | Search with Ag
+nnoremap <silent><leader>g <Esc>:Ag<CR>
 " C    | set alternate colorsheme setting
 nnoremap <leader>C <Esc>:colo gruvbox<CR>
 " =    | align current paragraph
@@ -189,7 +216,8 @@ nnoremap <leader>] :lnext<CR>
 nnoremap <leader>\ :lopen<CR>
 
 " d for vsp gd (go to definition)
-nnoremap <leader>d :only<bar>vsplit<CR>gd
+" disabled see coc config for <leader> gd
+" nnoremap <leader>d :only<bar>vsplit<CR>gd
 " }}}
 
 " Other settings and mappings {{{
@@ -204,22 +232,32 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 " For buffer unsaved changes
 set hidden
 
+" to allow case insensitive search when string is lowercase
+set smartcase
+
 " Incremental command preview
 set inccommand=split
 
 " default to relative numbering
-set relativenumber
+" set relativenumber
 set number
 
 " mods python-mode 
-set shiftwidth=4 " operation >> indents 4 columns; << unindents 4 columns
-set tabstop=4 " hard TAB displays as 4 columns
-set expandtab " insert spaces when hitting TABs
-set softtabstop=4 " insert/delete 4 spaces when hitting a TAB/BACKSPACE
-set shiftround " round indent to multiple of 'shiftwidth'
-set autoindent " align the new line indent with the previous line
+" moved these to ~/.config/vim/after/
 
 set nowrap
 " }}}
 
-" vim:foldmethod=marker:foldlevel=0
+"" " v i m :foldmethod=marker:foldlevel=0
+
+" Notes on runtimepath -- order of search for runtimefiles
+" see :help $VIMRUNTIME 
+"
+" 1. user home .vim
+" 3. $VIMRUNTIME
+" 5. user home "after" folder: 
+" 
+"
+" Global marks -- stored in the ShaDa file 
+" V - this file
+"
