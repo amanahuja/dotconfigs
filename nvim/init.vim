@@ -37,14 +37,15 @@ call plug#begin()
 Plug '~/dotconfigs/nvim/myhelp'
 Plug 'tpope/vim-sensible'
 Plug 'thaerkh/vim-workspace'
+" see also which-key as cheat
 
 " ## NAVIGATION AND SIDEBARS
-Plug 'https://github.com/scrooloose/nerdtree'
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
-"Plug 'mileszs/ack.vim'
+" Plug 'https://github.com/scrooloose/nerdtree'
+" Plug 'mileszs/ack.vim'
 
 " ## NOTIFICATION AND STATUS
 " Note: Powerline replaced by airline. Lightline is simpler still
@@ -54,10 +55,17 @@ Plug 'itchyny/lightline.vim'
 
 " ## CODING STUFF
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
-Plug 'puremourning/vimspector'   " Graphical debugging
-Plug 'liuchengxu/vista.vim'      " code navigation and ctags
-Plug 'honza/vim-snippets'  " for use with coc-snippets, for example
+Plug 'honza/vim-snippets'  " common snippets library, no engine
 Plug 'tpope/vim-fugitive'  " git integration, along with coc-git and signify
+" Plug 'puremourning/vimspector'   " Graphical debugging
+" Plug 'liuchengxu/vista.vim'      " code navigation and ctags
+" Plug 'SirVer/ultisnips' " snippets engine, not sure if this is needed
+
+" ## Integration with Obsidian
+" Add vimwiki, configure it and set some markdown options
+" See notes in Obsidian to set this up proporly, not done yet.
+" also using coc-markdownlint
+" Plug 'vimwiki/vimwiki'
 
 " ## COLOR SCHEMES / THEMES
 " gruvbox, lucario. Don't use solarized
@@ -70,49 +78,47 @@ Plug 'danilamihailov/beacon.nvim'
 Plug 'liuchengxu/vim-which-key'
 " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 
-
 " Disabled plugins;
-"    Python mode conflicts with ale?
-"    taglist needs research, ctags
-" Plug 'python-mode/python-mode', {'branch': 'develop'}
-" Plug 'janko-m/vim-test'
-" Plug 'https://github.com/vim-scripts/taglist.vim' replaced by Vista
+" Python mode conflicts with ale?
+"   taglist needs research, ctags
+"   Plug 'python-mode/python-mode', {'branch': 'develop'}
+"   Plug 'janko-m/vim-test'
+"   Plug 'https://github.com/vim-scripts/taglist.vim' replaced by Vista
 
 " Intellisense and LSP -- linting and code completion
-" Compare autocomplete: coc.nvim, deoplete+jedi-python, ncm2, YCM
-" Deoplete good option if no LSP. YCM and ALE strong but replaced by Coc
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } --> if no LSP
-" Plug 'deoplete-plugins/deoplete-jedi'  code completion with deoplete
-" Plug 'w0rp/ale' replaced by Coc for linting
+"   Compare autocomplete: coc.nvim, deoplete+jedi-python, ncm2, YCM
+"   Deoplete good option if no LSP. YCM and ALE strong but replaced by Coc
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } --> if no LSP
+"   Plug 'deoplete-plugins/deoplete-jedi'  code completion with deoplete
+"   Plug 'w0rp/ale' replaced by Coc for linting
 
 " Syntax highlighting
-" Plug 'davidhalter/jedi-vim  -- Jedi to be replaced by coC.nvim
-" Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
-"
-
+"   Plug 'davidhalter/jedi-vim  -- Jedi to be replaced by coC.nvim
+"   Plug 'numirias/semshi', {'do': 'UpdateRemotePlugins'}
 
 call plug#end()
 " }}}
 
 " Plugin Configurations {{{
-
-
 " also remember to check :CocConfig for coc
 source $HOME/.config/nvim/plug-config/coc.vim
 
-source $HOME/.config/nvim/plug-config/nerdtree.vim
-"source $HOME/.config/nvim/plug-config/airline.vim
 source $HOME/.config/nvim/plug-config/lightline.vim
 source $HOME/.config/nvim/plug-config/beacon.vim
 source $HOME/.config/nvim/plug-config/vista.vim
 source $HOME/.config/nvim/plug-config/vimspector.vim
-
+source $HOME/.config/nvim/plug-config/snippets.vim
 source $HOME/.config/nvim/plug-config/which-key.vim
+
+" inactive
+" source $HOME/.config/nvim/plug-config/vimwiki.vim
 " source $HOME/.config/nvim/plug-config/workspace.vim
 " source $HOME/.config/nvim/plug-config/w0rp-ale.vim
 " source $HOME/.config/nvim/plug-config/pymode.vim
 " source $HOME/.config/nvim/plug-config/deoplete.vim
 " source $HOME/.config/nvim/plug-config/ack.vim
+" source $HOME/.config/nvim/plug-config/nerdtree.vim
+" source $HOME/.config/nvim/plug-config/airline.vim
 " }}}
 
 " Scheme and theme {{{
@@ -200,24 +206,26 @@ nnoremap <leader>F <Esc>:NERDTreeToggle<CR>
 nnoremap <leader>T <Esc>:TlistToggle<CR>
 " G    | Search with Ag
 nnoremap <silent><leader>g <Esc>:Ag<CR>
-" C    | set alternate colorsheme setting
-nnoremap <leader>C <Esc>:colo gruvbox<CR>
 " =    | align current paragraph
 nnoremap <leader>= =ip
 " z    | toggle fold
 nnoremap <leader>z za
-" e    | defition for python object (use K for docs)
-let g:pymode_rope_goto_definition_bind = '<leader>e'
-" ycm  |
-let g:ycm_key_detailed_diagnostics = '<leader>ycm'
 " []\  | nav for loclist, useful for ale lint nav
 nnoremap <leader>[ :lprevious<CR>
 nnoremap <leader>] :lnext<CR>
 nnoremap <leader>\ :lopen<CR>
 
+"old
+" ycm  |
+" let g:ycm_key_detailed_diagnostics = '<leader>ycm'
+" e    | defition for python object (use K for docs)
+" override by coc explorer let g:pymode_rope_goto_definition_bind = '<leader>e'
 " d for vsp gd (go to definition)
 " disabled see coc config for <leader> gd
 " nnoremap <leader>d :only<bar>vsplit<CR>gd
+" C    | set alternate colorsheme setting
+" nnoremap <leader>C <Esc>:colo gruvbox<CR>
+
 " }}}
 
 " Other settings and mappings {{{
