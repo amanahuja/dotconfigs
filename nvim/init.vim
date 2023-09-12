@@ -1,13 +1,9 @@
-" .vimrc // nvim/init.vim
-" >>> echo $VIM
+" .vimrc // nvim/init.vim >>> echo $VIM
 " >>> echo $MYVIMRC
 " >>> echo $XDG_CONFIG_HOME
 
 " Notes
 " use :so % or :so $MYVIMRC to reload
-"
-" scratchpad: 
-" set nobackup
 
 " for python and autocomplete plugins
 set nocompatible
@@ -15,9 +11,9 @@ filetype off
 syntax on " vs syntax enable
 
 " set python 
-let g:python_host_prog = '/usr/bin/python2'
 " disable python 2 support or set it. 
-" let g:loaded_python_provider = 0  
+" let g:python_host_prog = '/usr/bin/python2'
+let g:loaded_python_provider = 0
 let g:python3_host_prog = '/home/aman/anaconda3/bin/python'
 
 " Vim Plug {{{
@@ -44,7 +40,7 @@ Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
-" Plug 'https://github.com/scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 " Plug 'mileszs/ack.vim'
 
 " ## NOTIFICATION AND STATUS
@@ -52,6 +48,7 @@ Plug 'justinmk/vim-sneak'
 "Plug 'mhinz/vim-signify'
 "Plug 'vim-airline/vim-airline'
 Plug 'itchyny/lightline.vim'
+Plug 'chentoast/marks.nvim'
 
 " ## CODING STUFF
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
@@ -60,6 +57,9 @@ Plug 'tpope/vim-fugitive'  " git integration, along with coc-git and signify
 " Plug 'puremourning/vimspector'   " Graphical debugging
 " Plug 'liuchengxu/vista.vim'      " code navigation and ctags
 " Plug 'SirVer/ultisnips' " snippets engine, not sure if this is needed
+" Treesitter is not currently activated, see https://github.com/nvim-treesitter/nvim-treesitter
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  
+" See also "LSP" section below. 
 
 " ## Integration with Obsidian
 " Add vimwiki, configure it and set some markdown options
@@ -73,6 +73,7 @@ Plug 'morhetz/gruvbox'
 Plug 'raphamorim/lucario'
 
 " ## non essential accessories
+Plug 'mhinz/vim-startify'
 Plug 'danilamihailov/beacon.nvim'
 
 Plug 'liuchengxu/vim-which-key'
@@ -85,7 +86,9 @@ Plug 'liuchengxu/vim-which-key'
 "   Plug 'janko-m/vim-test'
 "   Plug 'https://github.com/vim-scripts/taglist.vim' replaced by Vista
 
-" Intellisense and LSP -- linting and code completion
+" I   ... ntellisense and LSP -- linting and code completion
+"   LSP is now the best option (2023) -- see https://github.com/python-lsp/python-lsp-server
+"   ... 
 "   Compare autocomplete: coc.nvim, deoplete+jedi-python, ncm2, YCM
 "   Deoplete good option if no LSP. YCM and ALE strong but replaced by Coc
 "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' } --> if no LSP
@@ -103,12 +106,17 @@ call plug#end()
 " also remember to check :CocConfig for coc
 source $HOME/.config/nvim/plug-config/coc.vim
 
+source $HOME/.config/nvim/plug-config/fzf.vim
 source $HOME/.config/nvim/plug-config/lightline.vim
 source $HOME/.config/nvim/plug-config/beacon.vim
 source $HOME/.config/nvim/plug-config/vista.vim
 source $HOME/.config/nvim/plug-config/vimspector.vim
 source $HOME/.config/nvim/plug-config/snippets.vim
 source $HOME/.config/nvim/plug-config/which-key.vim
+
+" experimental -- lua plugin configs
+" lua require('testlua')
+lua require('marks-setup')
 
 " inactive
 " source $HOME/.config/nvim/plug-config/vimwiki.vim
@@ -126,14 +134,6 @@ source $HOME/.config/nvim/plug-config/which-key.vim
 " ~~~~~~~~~~~~~
 " scheme and themes configuration
 
-" solarized options
-"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-"let g:solarized_termcolors=256
-"set termguicolors
-"set background=light  " or dark
-"set t_co=16
-"colorscheme solarized
-
 " gruvbox options
 " set termguicolors
 " let g:gruvbox_italic=1
@@ -143,6 +143,7 @@ set background=dark
 " }}}
 
 " Custom Keymappings {{{
+
 " <A-key> alt-commands | <C-key> control commands
 " tnoremap: terminal mode,
 
@@ -151,6 +152,7 @@ set background=dark
 
 " use alt-nav {h,j,k,l} to nav windows
 " https://neovim.io/doc/user/nvim_terminal_emulator.html
+
 " terminal mode
 :tnoremap <Esc> <C-\><C-n>
 :tnoremap <A-h> <C-\><C-n><C-w>h
@@ -173,6 +175,14 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
 
 " }}}
 
+function! JumpDailyNote()
+  let fname = strftime("%Y-%m-%d") . ".md"
+  exe ":e /home/aman/notes/monolith/daily/" . fname
+endfunction
+
+nmap <leader>t :call JumpDailyNote()<CR>
+
+
 " Leader custom mappings {{{
 " See :help mapleader | Use Space.
 " Note: avoid conflict with tmux prefix
@@ -183,29 +193,25 @@ set timeoutlen=500
 
 " CHAR | RESULT
 " v    | open MYVIMRC for editing
+nnoremap <leader>v :tabe $MYVIMRC<CR>
 " V    | reload MYVIMRC
 "nnoremap <leader>v :tabe ~/dotconfigs/nvim/myhelp/doc/myhelp.txt<CR>:vsp $MYVIMRC<CR>
-nnoremap <leader>v :tabe $MYVIMRC<CR>
 nnoremap <leader>V :so $MYVIMRC<CR>
-" l    | next tab, buffer
+" l    | next tab, alternate file, buffer list
 nnoremap <leader>l :tabn<CR>
-nnoremap <leader>b :bnext<CR>
-nnoremap <leader>B :bprev<CR>
+nnoremap <leader>B <C-^>
+nnoremap <leader>b :Buffer<CR>
 " 5    | insert date (format YYYY-MM-DD DAY)
-" %    | insert datetime
 nnoremap <leader>5 "=strftime('%Y-%m-%d %a')<CR>P
+" %    | insert datetime
 nnoremap <leader>% "=strftime('%c')<CR>P
-" p    | paste from system clipboard
-" y    | yank to system clipboard
-nnoremap <leader>p "+p
-vnoremap <leader>y "+y
-vnoremap <leader>d "+d
-" F    | Toggle NERDTree
-nnoremap <leader>F <Esc>:NERDTreeToggle<CR>
-" T    | Toggle Taglist
-nnoremap <leader>T <Esc>:TlistToggle<CR>
-" G    | Search with Ag
-nnoremap <silent><leader>g <Esc>:Ag<CR>
+" G    | Search with Rg
+nnoremap <silent><leader>g <Esc>:Rg<CR>
+nnoremap <silent><leader>G <Esc>:Ag<CR>
+" f   | NERDTreeToggle
+nnoremap <silent><leader>f <Esc>:NERDTreeToggle<CR>
+" F   | Search Files with Fzf
+nnoremap <silent><leader>F <Esc>:Files<CR>
 " =    | align current paragraph
 nnoremap <leader>= =ip
 " z    | toggle fold
@@ -214,8 +220,18 @@ nnoremap <leader>z za
 nnoremap <leader>[ :lprevious<CR>
 nnoremap <leader>] :lnext<CR>
 nnoremap <leader>\ :lopen<CR>
+" {} | nav for arglist, useful for fzf -> arglist
+nnoremap <leader>{ :previous<CR>
+nnoremap <leader>} :wnext<CR>
 
 "old
+" T    | Toggle Taglist
+" disabled nnoremap <leader>T <Esc>:TlistToggle<CR>
+" p    | paste from system clipboard
+" y    | yank to system clipboard
+"nnoremap <leader>p "+p
+"vnoremap <leader>y "+y
+"vnoremap <leader>d "+d
 " ycm  |
 " let g:ycm_key_detailed_diagnostics = '<leader>ycm'
 " e    | defition for python object (use K for docs)
@@ -241,6 +257,7 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 set hidden
 
 " to allow case insensitive search when string is lowercase
+set ignorecase
 set smartcase
 
 " Incremental command preview
@@ -250,6 +267,9 @@ set inccommand=split
 " set relativenumber
 set number
 
+" clipboard
+set clipboard+=unnamedplus
+
 " mods python-mode 
 " moved these to ~/.config/vim/after/
 
@@ -257,6 +277,8 @@ set nowrap
 " }}}
 
 "" " v i m :foldmethod=marker:foldlevel=0
+set foldmethod=marker
+set foldlevel=0
 
 " Notes on runtimepath -- order of search for runtimefiles
 " see :help $VIMRUNTIME 
