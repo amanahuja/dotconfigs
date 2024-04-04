@@ -48,7 +48,7 @@ Plug 'scrooloose/nerdtree'
 "Plug 'mhinz/vim-signify'
 "Plug 'vim-airline/vim-airline'
 Plug 'itchyny/lightline.vim'
-Plug 'chentoast/marks.nvim'
+" Plug 'chentoast/marks.nvim'
 
 " ## CODING STUFF
 Plug 'neoclide/coc.nvim', {'branch' : 'release'}
@@ -58,7 +58,7 @@ Plug 'tpope/vim-fugitive'  " git integration, along with coc-git and signify
 " Plug 'liuchengxu/vista.vim'      " code navigation and ctags
 " Plug 'SirVer/ultisnips' " snippets engine, not sure if this is needed
 " Treesitter is not currently activated, see https://github.com/nvim-treesitter/nvim-treesitter
-" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " See also "LSP" section below. 
 
 " ## Integration with Obsidian
@@ -116,7 +116,7 @@ source $HOME/.config/nvim/plug-config/which-key.vim
 
 " experimental -- lua plugin configs
 " lua require('testlua')
-lua require('marks-setup')
+" lua require('marks-setup')
 
 " inactive
 " source $HOME/.config/nvim/plug-config/vimwiki.vim
@@ -175,12 +175,98 @@ command! DiffOrig vert new | set buftype=nofile | read ++edit # | 0d_
 
 " }}}
 
-function! JumpDailyNote()
+function! JumpDailyNote(direction)
+  let current_path = expand('%:p')
+  let current_note = matchstr(current_path, '\v(\d{4}-\d{2}-\d{2})\.md$')
+  let path = "/home/aman/notes/monolith/daily/"
+
+  " Remove the '.md' suffix from current_note
+  let current_note_date = substitute(current_note, '\.md$', '', '')
+
+  if a:direction == 'forward'
+    let destination_date = systemlist("date -d '".current_note_date."+1 day' +'%Y-%m-%d'")[0]
+  elseif a:direction == 'backward'
+    let destination_date = systemlist("date -d '".current_note_date."-1 day' +'%Y-%m-%d'")[0]
+  elseif empty(a:direction) || a:direction == ''
+    let destination_date = strftime("%Y-%m-%d")
+  else
+    echo "Invalid direction"
+    return
+  endif
+
+  let destination_fname = destination_date . ".md"
+  let destination_path = path . destination_fname
+
+  " Check if the destination note exists
+  let max_attempts = 365  " Limit the number of attempts to avoid an infinite loop
+  let attempt = 0
+
+  while !filereadable(destination_path) && attempt < max_attempts
+    if a:direction == 'forward'
+      let destination_date = systemlist("date -d '".destination_date."+1 day' +'%Y-%m-%d'")[0]
+    elseif a:direction == 'backward'
+      let destination_date = systemlist("date -d '".destination_date."-1 day' +'%Y-%m-%d'")[0]
+    endif
+
+    let destination_fname = destination_date . ".md"
+    let destination_path = path . destination_fname
+
+    let attempt += 1
+  endwhile
+
+  if filereadable(destination_path)
+    exe ":e " . destination_path
+  else
+    echo "No note available for " . a:direction . " : " . destination_path
+  endif
+endfunction
+
+function! OneDayJumpDailyNote(direction)
+  let current_path = expand('%:p')
+  let current_note = matchstr(current_path, '\v(\d{4}-\d{2}-\d{2})\.md$')
+  let current_note_date = substitute(current_note, '\.md$', '', '')
+  let path = "/home/aman/notes/monolith/daily/"
+
+  if a:direction == 'forward'
+    let destination_date = systemlist("date -d '".current_note_date."+1 day' +'%Y-%m-%d'")[0]
+  elseif a:direction == 'backward'
+    let destination_date = systemlist("date -d '".current_note_date."-1 day' +'%Y-%m-%d'")[0]
+  elseif empty(a:direction) || a:direction == ''
+    let destination_date = strftime("%Y-%m-%d")
+  else
+    echo "Invalid direction"
+    return
+  endif
+  
+  let destination_fname = destination_date . ".md"
+  let destination_path = path . destination_fname
+  
+  if filereadable(destination_path)
+    exe ":e " . destination_path
+  else
+    echo "No note available for " . a:direction . " : " . destination_path
+  endif
+endfunction
+
+function! OrigJumpDailyNote()
   let fname = strftime("%Y-%m-%d") . ".md"
   exe ":e /home/aman/notes/monolith/daily/" . fname
 endfunction
 
-nmap <leader>t :call JumpDailyNote()<CR>
+" mappings for daily note jumps.
+" ------------
+" Jump to today's note
+nmap <leader>t :call JumpDailyNote('')<CR>
+
+" Jump to the previous note
+nmap <M-Left> :call JumpDailyNote('backward')<CR>
+nmap <leader>tj :call JumpDailyNote('backward')<CR>
+nmap <leader>tp :call JumpDailyNote('backward')<CR>
+
+" Jump to the next note
+nmap <M-Right> :call JumpDailyNote('forward')<CR>
+nmap <leader>tk :call JumpDailyNote('forward')<CR>
+nmap <leader>tn :call JumpDailyNote('forward')<CR>
 
 
 " Leader custom mappings {{{
