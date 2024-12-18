@@ -4,13 +4,16 @@
 
 # some more ls aliases
 alias ls='ls -F --color' #AA +dd
-# simpler: alias ld='ls -d */' 
-alias ld="ls -ld */ | cut -f1 -d'/'"
-alias dir='tree -ldha -L 2'
-alias lt='ls -alF --sort=extension'
-alias ll='ls -Flat'
 alias la='ls -A'
 alias l='ls -CF'
+# directories and tree
+# simpler: alias ld='ls -d */' 
+# alias ld="ls -ld */ | cut -f1 -d'/'"
+alias ld='tree -daC -L 1'
+alias dir='tree -ldha -L 2'
+# sorted by date 
+alias lt='ls -Flat'    
+alias ll='ls -alF --sort=extension'
 
 # common aliases
 alias ..='cd ..'
