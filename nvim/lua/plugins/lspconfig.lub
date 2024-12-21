@@ -1,0 +1,11 @@
+-- ~/.config/nvim/lua/plugins/lspconfig.lua
+local lspconfig = require("lspconfig")
+
+-- Python LSP
+lspconfig.pyright.setup({})
+
+-- TypeScript/JavaScript LSP
+lspconfig.tsserver.setup({})
+
+-- HTML LSP
+lspconfig.html.setup({})

@@ -1,0 +1,25 @@
+-- ~/.config/nvim/lua/plugins/treesitter.lua
+
+require("nvim-treesitter.configs").setup{
+  -- a list of parser names
+  ensure_installed = { "python", "lua", "javascript", "html", "css" }, -- Add languages as needed
+
+  sync_install = false,
+  auto_install = true, 
+  highlight = { -- Enable syntax highlighting
+    enable = true,
+  },
+  indent = { enable = true },    -- Enable Treesitter-based indentation
+  
+  -- testing this: 
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+}
+
