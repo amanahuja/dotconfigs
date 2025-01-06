@@ -9,7 +9,8 @@ require("config.lazy")
 -- plugins config
 require("plugins")
 
--- loading these after plugins
+-- custom functions (loading these after plugins)
+require("config.custom_func")
 
 -- key mappings
 require("keymaps")

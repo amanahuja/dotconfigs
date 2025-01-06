@@ -87,9 +87,22 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       require("fzf-lua").setup({
-          -- config here, tbd
+        -- profile baseline
+        {"fzf-vim", "telescope"},
+        
+        -- config here, tbd. See :help fzf-lua-configuration
+        -- 
+         
+        file_ignore_patterns = { "%.ajson$" },
+        
+        keymap = {
+          fzf = {
+            ["ctrl-q"] = "select-all+accept",
+          },        
+          -- 
+        }, 
       })
-    end
+    end,
   }, 
 
 
@@ -115,14 +128,57 @@ return {
   -- workflow: obsidian, workspace, snippets
   -- ==
   -- "epwalsh/obsidian.nvim" requires dependency plenary.nvim ?
+
+  -- Quickfix! 
   {
-    "folke/which-key.nvim",
+    'stevearc/quicker.nvim',
+     event = "FileType qf",
+    --@module "quicker"
+    --@type quicker.SetupOptions
+    config = function()
+      require("quicker").setup({
+         opts = {},
+         keys = {
+          { ">",
+            function()
+              require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+            end,
+            desc = "Expand quickfix context", 
+          },
+          { "<",
+            function()
+              require("quicker").collapse()
+            end,
+            desc = "Collapse quickfix context",
+          },
+
+        },
+      })
+    end
+  },
+
+  -- autosave and worksessions
+  {
+    -- plugin: auto-save.nvim
+    -- src: https://github.com/pocco81/auto-save.nvim
+    "Pocco81/auto-save.nvim",
     event = "VeryLazy",
     opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
+      execution_message = {
+        message = function() -- message to print on save
+          return ""
+        end,
+      },
     },
+  },
+
+  -- which key
+  {
+    -- plugin: which-key.nvim
+    -- src: https://github.com/folke/which-key.nvim
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {},
     keys = {
       {
         "<leader>?",
