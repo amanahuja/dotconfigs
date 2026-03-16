@@ -1,0 +1,93 @@
+# Global justfile for Sharanga
+# 
+# alias kmd='just -g' is setup in bash for using these anywhere! 
+# 
+
+# settings for just
+set shell := ["bash", "-cu"]
+# set quiet := true
+
+# virtualenv path for asr
+asr := "$HOME/globalvenv/asr/bin"
+
+# transcription variables
+tmpdir := "/tmp"
+wav := tmpdir + "/asr.wav"
+txt := tmpdir + "/text.txt"
+asrmodel := "small"
+
+# Check CUDA availability
+check-cuda:
+    uv run python -c "import torch; print(f'PyTorch version: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}'); print(f'Device count: {torch.cuda.device_count()}'); print(f'Current device: {torch.cuda.current_device() if torch.cuda.is_available() else \"N/A\"}'); print(f'Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
+
+# Copy {{TXT}} to clipboard (helper recipe)
+_to_clipboard:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  if command -v wl-copy >/dev/null; then
+    cat {{txt}} | wl-copy # && echo "(copied to clipboard via wl-copy)"
+  elif command -v xclip >/dev/null; then
+    cat {{txt}} | xclip -selection clipboard # && echo "(copied to clipboard via xclip)"
+  else
+    echo "(no clipboard tool found - install wl-copy or xclip)"
+  fi
+
+# Transcribe audio {{wav}} and save to {{TXT}} (helper recipe)
+_transcribe:
+  #!/usr/bin/env bash
+  echo "Transcribing..."
+  set -euo pipefail
+  . {{asr}}/activate
+
+  # template:  whisper-ctranslate2 /tmp/asr.wav --model small --device cuda --language en
+  # optional sendg whisper output to /tmp/whisper.log  to decrease verbosity: whisper-ctranslate2 ...  > /tmp/whisper.log 2>&1
+  LD_LIBRARY_PATH="$VIRTUAL_ENV/lib/python3.13/site-packages/nvidia/cublas/lib:${LD_LIBRARY_PATH:-}" \
+    whisper-ctranslate2 {{wav}} --model {{asrmodel}} --device cuda --language English --output_dir {{tmpdir}} --output_format txt --verbose False > /tmp/whisper.log 2>&1
+
+  if [ -f {{tmpdir}}/asr.txt ]; then
+    # rename whisper output file to {{txt}}  (no setting exists for whisper)
+    # I do this so _to_clipboard can be used for other outputs
+    mv {{tmpdir}}/asr.txt {{txt}}
+  else
+    echo "did not find asr.txt"
+  fi
+
+  cat {{txt}}
+
+# Push to talk - record, transcribe, and copy to clipboard
+ptt:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  rm -f {{wav}}
+  . {{asr}}/activate
+  ~/bin/pw-record-wrapper.sh {{wav}} --rate 16000 --channels 1
+  test -s {{wav}}
+
+  just -g _transcribe
+  just -g _to_clipboard
+
+# Original ptt recipe (kept for posterity)
+ptt-files:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  rm -f /tmp/asr.wav
+  echo "🎤 Starting recording..."
+  . {{asr}}/activate
+  ~/bin/pw-record-wrapper.sh /tmp/asr.wav --rate 16000 --channels 1
+  echo "📝 Transcribing..."
+  test -s /tmp/asr.wav
+  whisper-ctranslate2 /tmp/asr.wav --model small --device cuda --language en
+
+# push to talk 
+# this didn't work b/c pw-record SIGINT issue
+# ptt: 
+#  rm -f /tmp/asr.wav
+#  . {{asr}}/activate
+#  pw-record --rate 16000 --channels 1 /tmp/asr.wav; rc=$?; [ $rc -eq 0 -o $rc -eq 130 ] || exit $rc
+#  test -s /tmp/asr.wav
+#  whisper-ctranslate2 /tmp/asr.wav --model small --device cuda --language en
+
+## llm datasette stuff
+# ---- 
+# llm cmd: 
+
