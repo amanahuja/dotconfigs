@@ -24,10 +24,10 @@ check-cuda:
 _to_clipboard:
   #!/usr/bin/env bash
   set -euo pipefail
-  if command -v wl-copy >/dev/null; then
-    cat {{txt}} | wl-copy # && echo "(copied to clipboard via wl-copy)"
-  elif command -v xclip >/dev/null; then
-    cat {{txt}} | xclip -selection clipboard # && echo "(copied to clipboard via xclip)"
+  if [ -n "${WAYLAND_DISPLAY:-}" ] && command -v wl-copy >/dev/null; then
+    cat {{txt}} | wl-copy
+  elif [ -n "${DISPLAY:-}" ] && command -v xclip >/dev/null; then
+    cat {{txt}} | xclip -selection clipboard
   else
     echo "(no clipboard tool found - install wl-copy or xclip)"
   fi

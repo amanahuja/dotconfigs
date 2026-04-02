@@ -184,10 +184,14 @@ map('n', '<leader>tv', function()
 
   vim.fn.termopen("just -g ptt", {
     on_exit = function()
-      -- optional: close the popup when the command finishes
       vim.api.nvim_win_close(win, true)
-      vim.cmd('normal! "+p')
-      
+      vim.schedule(function()
+        local lines = vim.fn.readfile("/tmp/text.txt")
+        if #lines > 0 then
+          local pos = vim.api.nvim_win_get_cursor(0)
+          vim.api.nvim_buf_set_text(0, pos[1] - 1, pos[2], pos[1] - 1, pos[2], lines)
+        end
+      end)
     end,
   })
 
