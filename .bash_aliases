@@ -29,13 +29,13 @@ alias dotlazy='lazygit --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 ## finding and fzf stuff
 #
 
-## these older versions use find: 
-#    alias ff="find . -type f -not -path './.*/*' | fzf --multi --height=80% --preview 'less {}'"
-
-alias vizz="find . -type f -not -path './.*/*' | fzf --reverse --multi --preview 'bat --style=numbers --color=always --line-range=:100 {}' | xargs -d '\n' nvim"
 function ff() {
   fd "$@" | fzf --multi --height=80% --preview "bat --style=numbers --color=always --line-range=:100 {}"
 }
+
+## these older versions use find: 
+# alias ff="find . -type f -not -path './.*/*' | fzf --multi --height=80% --preview 'less {}'"
+# alias vizz="find . -type f -not -path './.*/*' | fzf --reverse --multi --preview 'bat --style=numbers --color=always --line-range=:100 {}' | xargs -d '\n' nvim"
 
 # paste clipboard contents, useful when piping contents to LLM. : `clip | ai "ask a question about the clipboard"`
 alias clip="xclip -selection clipboard -o"
