@@ -91,3 +91,47 @@ ptt-files:
 # ---- 
 # llm cmd: 
 
+# Run system update checks (no updates applied)
+# Checks: dotfiles, brew, mise, flatpak, pipx, uv
+system-check:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  SENTINEL="$HOME/.config/just/last-system-check"
+
+  echo "=== [dotfiles] ==="
+  /usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" status --short || true
+
+  echo ""
+  echo "=== [brew outdated (top-level, unpinned)] ==="
+  _brew=$(comm -23 \
+    <(comm -12 <(brew outdated 2>/dev/null | grep -v '^✔' | sort) <(brew leaves | sort)) \
+    <(brew list --pinned | sort) 2>/dev/null || true)
+  if [[ -z "$_brew" ]]; then echo "up to date"; else echo "$_brew"; fi
+
+  echo ""
+  echo "=== [mise outdated] ==="
+  _mise=$(mise outdated 2>/dev/null || true)
+  if [[ -z "$_mise" ]]; then echo "up to date"; else echo "$_mise"; fi
+
+  echo ""
+  echo "=== [flatpak] ==="
+  _flatpak_count=$(flatpak remote-ls --updates --app 2>/dev/null | wc -l || echo 0)
+  if [[ "$_flatpak_count" -eq 0 ]]; then
+    echo "up to date"
+  else
+    echo "$_flatpak_count app update(s) available — use Discover to update"
+  fi
+
+  echo ""
+  echo "=== [pipx] ==="
+  pipx list --short 2>/dev/null || true
+
+  echo ""
+  echo "=== [uv] ==="
+  uv self update --dry-run 2>&1 || true
+
+  echo ""
+  echo "---"
+  echo "To update: ~/project-sharanga/aman_local_cheatsheet/sharanga_updates_readme.md"
+  touch "$SENTINEL"
+

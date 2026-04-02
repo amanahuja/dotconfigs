@@ -209,6 +209,16 @@ unset __conda_setup
 
 # <<< conda initialize <<<
 
+# Remind to run kmd system-check every 2 weeks
+_sc_sentinel="$HOME/.config/just/last-system-check"
+if [[ ! -f "$_sc_sentinel" ]] || \
+   [[ $(( $(date +%s) - $(stat -c %Y "$_sc_sentinel") )) -gt $((14 * 86400)) ]]; then
+  _sc_last=$(stat -c %y "$_sc_sentinel" 2>/dev/null | cut -d' ' -f1 || echo "never")
+  echo "Reminder: run 'kmd system-check'  (last: $_sc_last)"
+  unset _sc_last
+fi
+unset _sc_sentinel
+
 # ---------------------------------
 # Profiling (bottom)
 # set +x
