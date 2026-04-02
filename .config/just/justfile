@@ -99,7 +99,8 @@ system-check:
   SENTINEL="$HOME/.config/just/last-system-check"
 
   echo "=== [dotfiles] ==="
-  /usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" status --short || true
+  _dotfiles=$(/usr/bin/git --git-dir="$HOME/.dotfiles/" --work-tree="$HOME" status --short 2>/dev/null || true)
+  if [[ -z "$_dotfiles" ]]; then echo "up to date"; else echo "$_dotfiles"; fi
 
   echo ""
   echo "=== [brew outdated (top-level, unpinned)] ==="
