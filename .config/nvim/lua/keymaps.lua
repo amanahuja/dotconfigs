@@ -34,6 +34,11 @@ map("n", "N", "Nzzzv", { desc = "Previous search result, center and unfold" })
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
+-- Collect selection into /tmp/gather_info_nvim_YYYYMMDD.md
+map("v", "<leader>cc", function()
+  require("custom.collect").collect_selection()
+end, { desc = "Collect selection to /tmp/gather_info_nvim_YYYYMMDD.md" })
+
 -- Arglist navigation
 map("n", "<leader>[", ":cprevious<CR>", { desc = "Previous item in arglist" })
 map("n", "<leader>]", ":cnext<CR>", { desc = "Next item in arglist" })
