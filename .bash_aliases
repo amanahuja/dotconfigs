@@ -7,8 +7,7 @@
 alias ll='ls --color=auto -AlhFS'
 alias la='ls -A'
 alias l='ls -AlFt'
-alias ls='ls -A1'
-alias ls="ls --color=auto -1h --group-directories-first"
+alias ls="ls --color=auto -A -1h --group-directories-first"
 
 # git aliases. See also aliases in .gitconfig
 alias gs='git status'
@@ -63,8 +62,8 @@ alias stopllama='sudo systemctl stop ollama && sudo systemctl status ollama'
 # datasette llm 
 # config at ~/.config/io.datasette.llm
 # see notes in ~/workspace/aider_reference
-alias ai="llm"
-alias sai="llm cmd "
+alias ai="conda run -n base llm"
+alias sai="conda run -n base llm cmd "
 # alias webai="llm -f 'site:https://someurl.com/article' "what is this article about?"
 
 ## aider with my config in the place I awnt it. 
