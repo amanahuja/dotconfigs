@@ -96,7 +96,7 @@ ptt-files:
 # llm cmd: 
 
 # Run system update checks (no updates applied)
-# Checks: dotfiles, brew, mise, flatpak, pipx, uv
+# Checks: dotfiles, brew, mise, flatpak, pipx, uv, obsidian backup
 system-check:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -130,6 +130,21 @@ system-check:
   echo ""
   echo "=== [pipx] ==="
   pipx list --short 2>/dev/null || true
+
+  echo ""
+  echo "=== [obsidian backup] ==="
+  _ob_backup=$(ls -t "$HOME/obsidian/obsidian-backup/obsidian-monolith-backup-"*.tar.gz 2>/dev/null | head -1)
+  if [[ -z "$_ob_backup" ]]; then
+    echo "no backup found — run ~/obsidian/weekly_backup_script.sh"
+  else
+    _ob_age=$(( ( $(date +%s) - $(stat -c %Y "$_ob_backup") ) / 86400 ))
+    _ob_date=$(stat -c %y "$_ob_backup" | cut -d' ' -f1)
+    if [[ "$_ob_age" -gt 14 ]]; then
+      echo "last backup: $_ob_date ($_ob_age days ago) — consider running ~/obsidian/weekly_backup_script.sh"
+    else
+      echo "last backup: $_ob_date ($_ob_age days ago)"
+    fi
+  fi
 
   echo ""
   echo "=== [uv] ==="
