@@ -96,7 +96,7 @@ ptt-files:
 # llm cmd: 
 
 # Run system update checks (no updates applied)
-# Checks: dotfiles, brew, mise, flatpak, pipx, uv, obsidian backup
+# Checks: dotfiles, brew, mise, flatpak, pipx, ollama, nvim, aider/llm, uv, obsidian backup
 system-check:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -145,6 +145,42 @@ system-check:
       echo "last backup: $_ob_date ($_ob_age days ago)"
     fi
   fi
+
+  echo ""
+  echo "=== [ollama] ==="
+  if command -v ollama &>/dev/null; then
+    _ollama_age=$(( ( $(date +%s) - $(stat -c %Y "$(command -v ollama)") ) / 86400 ))
+    _ollama_date=$(stat -c %y "$(command -v ollama)" | cut -d' ' -f1)
+    if [[ "$_ollama_age" -gt 60 ]]; then
+      echo "last updated: $_ollama_date ($_ollama_age days ago) — consider updating"
+    else
+      echo "last updated: $_ollama_date ($_ollama_age days ago)"
+    fi
+  else
+    echo "not found"
+  fi
+
+  echo ""
+  echo "=== [nvim] ==="
+  _nvim_appimage="$HOME/bin.appimage/nvim.appimage"
+  if [[ -f "$_nvim_appimage" ]]; then
+    _nvim_age=$(( ( $(date +%s) - $(stat -c %Y "$_nvim_appimage") ) / 86400 ))
+    _nvim_date=$(stat -c %y "$_nvim_appimage" | cut -d' ' -f1)
+    if [[ "$_nvim_age" -gt 60 ]]; then
+      echo "last updated: $_nvim_date ($_nvim_age days ago) — consider updating"
+    else
+      echo "last updated: $_nvim_date ($_nvim_age days ago)"
+    fi
+  else
+    echo "not found at ~/bin.appimage/nvim.appimage"
+  fi
+
+  echo ""
+  echo "=== [aider / llm] ==="
+  _aider_ver=$(conda run -n base aider --version 2>/dev/null | head -1 || echo "not found")
+  _llm_ver=$(conda run -n base llm --version 2>/dev/null | head -1 || echo "not found")
+  echo "aider: $_aider_ver"
+  echo "llm:   $_llm_ver"
 
   echo ""
   echo "=== [uv] ==="
