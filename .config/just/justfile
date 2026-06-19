@@ -22,7 +22,7 @@ _default:
 
 # Check CUDA availability
 check-cuda:
-    uv run python -c "import torch; print(f'PyTorch version: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}'); print(f'Device count: {torch.cuda.device_count()}'); print(f'Current device: {torch.cuda.current_device() if torch.cuda.is_available() else \"N/A\"}'); print(f'Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
+    uv run --project ~/workspace/test_cuda_uv python -c "import torch; print(f'PyTorch version: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}'); print(f'CUDA version: {torch.version.cuda if torch.cuda.is_available() else \"N/A\"}'); print(f'Device count: {torch.cuda.device_count()}'); print(f'Current device: {torch.cuda.current_device() if torch.cuda.is_available() else \"N/A\"}'); print(f'Device name: {torch.cuda.get_device_name(0) if torch.cuda.is_available() else \"N/A\"}')"
 
 # Copy {{TXT}} to clipboard (helper recipe)
 _to_clipboard:
@@ -90,6 +90,19 @@ ptt-files:
 #  pw-record --rate 16000 --channels 1 /tmp/asr.wav; rc=$?; [ $rc -eq 0 -o $rc -eq 130 ] || exit $rc
 #  test -s /tmp/asr.wav
 #  whisper-ctranslate2 /tmp/asr.wav --model small --device cuda --language en
+
+## project scaffolding
+
+# Create a new justfile in the current directory from the template
+make-justfile:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [ -f justfile ]; then
+        echo "Error: justfile already exists in $(pwd). Remove it first." >&2
+        exit 1
+    fi
+    cp ~/project-sharanga/aman_local_cheatsheet/justfile_template ./justfile
+    echo "Created justfile in $(pwd)"
 
 ## llm datasette stuff
 # ---- 
