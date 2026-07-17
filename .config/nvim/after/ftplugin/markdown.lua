@@ -1,4 +1,4 @@
-vim.opt_local.conceallevel = 1
+vim.opt_local.conceallevel = 0  -- 0 = show all markers (*, `, [], etc.); set to 1/2 to conceal them
 vim.opt_local.textwidth = 75
 
 -- Folding configuration for markdown headings

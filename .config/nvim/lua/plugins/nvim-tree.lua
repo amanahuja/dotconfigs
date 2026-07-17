@@ -7,7 +7,7 @@ return {
 
   config = function()
     require("nvim-tree").setup({
-      sort_by = "modification_time",
+      sort_by = "name",
       -- Not yet implemented: sort_reverse = true,
     })
   end,
