@@ -113,7 +113,7 @@ make-justfile:
 # llm cmd: 
 
 # Run system update checks (no updates applied)
-# Checks: dotfiles, brew, mise, flatpak, pipx, ollama, nvim, aider/llm, uv, obsidian backup
+# Checks: dotfiles, brew, mise, flatpak, pipx, ollama, nvim, kitty, aider/llm, uv, obsidian backup
 system-check:
   #!/usr/bin/env bash
   set -euo pipefail
@@ -190,6 +190,25 @@ system-check:
     fi
   else
     echo "not found at ~/bin.appimage/nvim.appimage"
+  fi
+
+  echo ""
+  echo "=== [kitty] ==="
+  if command -v kitty &>/dev/null; then
+    # kitty.app dir's mtime reflects actual install time (bumped by mv on every
+    # installer run); the kitty binary itself keeps the upstream release build
+    # date since tar preserves archived timestamps for bin/lib/share entries.
+    _kitty_dir="$HOME/.local/kitty.app"
+    _kitty_ver=$(kitty --version 2>/dev/null | awk '{print $2}')
+    _kitty_age=$(( ( $(date +%s) - $(stat -c %Y "$_kitty_dir") ) / 86400 ))
+    _kitty_date=$(stat -c %y "$_kitty_dir" | cut -d' ' -f1)
+    if [[ "$_kitty_age" -gt 60 ]]; then
+      echo "version $_kitty_ver, installed: $_kitty_date ($_kitty_age days ago) — consider updating via installer script"
+    else
+      echo "version $_kitty_ver, installed: $_kitty_date ($_kitty_age days ago)"
+    fi
+  else
+    echo "not found at ~/.local/kitty.app"
   fi
 
   echo ""
