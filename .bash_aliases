@@ -37,7 +37,8 @@ function ff() {
 # alias vizz="find . -type f -not -path './.*/*' | fzf --reverse --multi --preview 'bat --style=numbers --color=always --line-range=:100 {}' | xargs -d '\n' nvim"
 
 # paste clipboard contents, useful when piping contents to LLM. : `clip | ai "ask a question about the clipboard"`
-alias clip="xclip -selection clipboard -o"
+alias clip="wl-paste"
+alias xclip="xclip -selection clipboard -o"
 
 ## ----------- Application helpers -----------------
 ## 
@@ -59,11 +60,8 @@ alias goenv='source .venv/bin/activate'
 alias gollama='sudo systemctl start ollama && sudo systemctl status ollama'
 alias stopllama='sudo systemctl stop ollama && sudo systemctl status ollama'
 
-# datasette llm 
+# datasette llm (installed via `uv tool install llm`, on PATH as `llm`)
 # config at ~/.config/io.datasette.llm
-# see notes in ~/workspace/aider_reference
-alias ai="conda run -n base llm"
-alias sai="conda run -n base llm cmd "
 # alias webai="llm -f 'site:https://someurl.com/article' "what is this article about?"
 
 ## aider with my config in the place I awnt it. 
@@ -82,4 +80,9 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 ## rarely used, mostly here as a reminder
 # 
 alias ls-services='sudo systemctl list-units --type=service --state=running'
+
+## ----------- mpv / music -----------------
+#
+alias radio='mpv ~/Music/playlists/radio.m3u'
+alias music='mpv ~/Music'
 
