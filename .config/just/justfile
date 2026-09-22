@@ -32,6 +32,14 @@ check-cuda:
 check-cuda-vram:
     uv run --project ~/workspace/test_cuda_uv python ~/workspace/test_cuda_uv/check_cuda_vram.py
 
+# Start an ipython session (calculator/scratchpad)
+ipy:
+    uvx ipython
+
+# Start a marimo notebook in ~/workspace
+marimo:
+    uvx --directory /home/aman/workspace marimo@latest edit
+
 # Copy {{TXT}} to clipboard (helper recipe)
 _to_clipboard:
   #!/usr/bin/env bash
