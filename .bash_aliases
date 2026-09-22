@@ -84,5 +84,7 @@ alias ls-services='sudo systemctl list-units --type=service --state=running'
 ## ----------- mpv / music -----------------
 #
 alias radio='mpv ~/Music/playlists/radio.m3u'
-alias music='mpv ~/Music'
+# alias music='mpv ~/Music' # there's no music here
 
+# alias music='mpv --directory-mode=recursive --directory-filter-types=audio --no-audio-display /mnt/cottonwood/music'
+alias music='mpv --directory-mode=recursive --directory-filter-types=audio /mnt/cottonwood/music'

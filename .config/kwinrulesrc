@@ -1,0 +1,14 @@
+[1]
+Description=mpv on laptop display
+above=true
+aboverule=2
+noborder=true
+noborderrule=2
+screen=0
+screenrule=2
+wmclass=mpv
+wmclassmatch=1
+
+[General]
+count=1
+rules=1
