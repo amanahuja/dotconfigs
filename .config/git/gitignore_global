@@ -1,0 +1,42 @@
+# Aman notes
+# files that start with aa_
+aa*.*
+aalocal/
+
+# # Neovim
+*.swp
+*.swo
+*.un~
+.netrwhist
+session.vim
+
+# LLM stuff 
+.aider.conf
+.aider.*
+.aider/
+.agents/
+skills-lock.json
+
+# Marimo
+__marimo__/
+
+# Jupyter
+.ipynb_checkpoints/
+.jupyter/
+*.ipynb_*
+*.ipynb_checkpoints/
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# pyenv and mise and similar
+.python-version
+mise.local.toml
+uv.toml
+
+# other
+.virtual_documents/
+.cache/

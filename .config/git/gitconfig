@@ -1,0 +1,28 @@
+[user]
+	name = Aman on sharanga
+	email = 324454+amanahuja@users.noreply.github.com
+
+[core]
+  editor = vim
+	excludesfile = /home/aman/.config/git/gitignore_global
+
+[alias] 
+  s = status
+  c = commit -m
+  hist = log --oneline --graph --decorate --all
+  undo = reset --soft HEAD~1
+
+
+;[include]
+;	path = /home/aman/.config/git/gitconfig
+
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
