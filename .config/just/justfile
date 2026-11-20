@@ -144,6 +144,11 @@ system-check:
   if [[ -z "$_dotfiles" ]]; then echo "up to date"; else echo "$_dotfiles"; fi
 
   echo ""
+  echo "=== [cheatsheet repo git status] ==="
+  _cheatsheet=$(/usr/bin/git -C "$HOME/project-sharanga/aman_local_cheatsheet" status --short 2>/dev/null || true)
+  if [[ -z "$_cheatsheet" ]]; then echo "clean"; else echo "$_cheatsheet"; fi
+
+  echo ""
   echo "=== [brew outdated (top-level, unpinned)] ==="
   _brew=$(comm -23 \
     <(comm -12 <(brew outdated 2>/dev/null | grep -v '^✔' | sort) <(brew leaves | sort)) \
@@ -227,3 +232,17 @@ system-check:
   echo "---"
   echo "To update: ~/project-sharanga/aman_local_cheatsheet/sharanga_updates_readme.md"
   touch "$SENTINEL"
+
+## pi coding agent profiles (config in ~/.pi/profiles/<name>)
+# Run from inside a project folder, e.g. `kmd pi-basic`. [no-cd] keeps cwd = project.
+
+# pi: basic profile (soft folder limit, open network)
+[no-cd]
+pi-basic *args:
+    PI_CODING_AGENT_DIR="$HOME/.pi/profiles/basic" exec mise exec node -- pi {{args}}
+
+# pi: obsidian profile (bubblewrap sandbox, vault only, LunaRoute-only network)
+# Ignores the current folder on purpose: the sandbox always opens the vault.
+pi-obsidian *args:
+    exec ~/.pi/profiles/bin/pi-obsidian-sandbox {{args}}
+    # PI_CODING_AGENT_DIR="$HOME/.pi/profiles/basic" exec mise exec node -- env -u OPENAI_API_KEY pi {{args}}
